@@ -9,23 +9,27 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
-    <div class="login-page">
-        <div class="form">
+    <section class="login-page">
+        <section class="form">
             <form class="register-form" style="display:none;" id="register-form">
-                <input type="text" id="name" placeholder="Nombre de Usuario" required/>
-                <input type="password" id="password" placeholder="Contraseña" required/>
+                <label for="name">Nombre de Usuario</label>
+                <input type="text" id="name" placeholder="Nombre de Usuario" required/>             
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" placeholder="Contraseña" required/>            
                 <button type="button" id="create_account_btn">Crear</button>
-                <button type="button" id="generate_password_btn">Generar Contraseña Segura</button>
+                <button type="button" id="generate_password_btn">Generar Contraseña Segura</button>              
                 <p class="message">¿Ya estás registrado? <a href="#" onclick="showLoginForm()">Iniciar sesión</a></p>
-            </form>
+            </form>           
             <form class="login-form" id="login-form">
-                <input type="text" name="username" placeholder="Nombre de Usuario" required/>
-                <input type="password" name="password" placeholder="Contraseña" required/>
-                <button type="submit">Iniciar</button>
+                <label for="username">Nombre de Usuario</label>
+                <input type="text" name="username" placeholder="Nombre de Usuario" required/>              
+                <label for="login-password">Contraseña</label>
+                <input type="password" name="password" placeholder="Contraseña" required/>             
+                <button type="submit">Iniciar</button>                          
                 <p class="message">¿No estás registrado? <a href="#" onclick="showRegisterForm()">Crea tu cuenta</a></p>
             </form>
-        </div>
-    </div>
+        </section>
+    </section>    
     <script>
     function showNotification(message, type) {
         Swal.fire({
