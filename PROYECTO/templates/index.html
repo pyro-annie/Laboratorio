@@ -16,86 +16,75 @@
                 <input type="password" id="password" placeholder="Contraseña" required/>
                 <button type="button" id="create_account_btn">Crear</button>
                 <button type="button" id="generate_password_btn">Generar Contraseña Segura</button>
-                <p class="message">¿Ya estas registrado? <a href="#" onclick="showLoginForm()">Sign In</a></p>
+                <p class="message">¿Ya estás registrado? <a href="#" onclick="showLoginForm()">Iniciar sesión</a></p>
             </form>
             <form class="login-form" id="login-form">
                 <input type="text" name="username" placeholder="Nombre de Usuario" required/>
                 <input type="password" name="password" placeholder="Contraseña" required/>
-                <button type="submit">iniciar</button>
-                <p class="message">¿No estas registrado?<a href="#" onclick="showRegisterForm()">Create tu cuenta</a></p>
+                <button type="submit">Iniciar</button>
+                <p class="message">¿No estás registrado? <a href="#" onclick="showRegisterForm()">Crea tu cuenta</a></p>
             </form>
         </div>
     </div>
     <script>
-function showNotification(message, type) {
-    Swal.fire({
-        icon: type,
-        title: type === 'error' ? 'Error' : 'Success',
-        text: message,
-        timer: 3000
+    function showNotification(message, type) {
+        Swal.fire({
+            icon: type,
+            title: type === 'error' ? 'Error' : 'Éxito',
+            text: message,
+            timer: 3000
+        });
+    }
+    
+    function showRegisterForm() {
+        $('.login-form').hide();
+        $('.register-form').show();
+    }
+    
+    function showLoginForm() {
+        $('.register-form').hide();
+        $('.login-form').show();
+    }
+    
+    $('#generate_password_btn').click(function() {
+        $.post('/generate-password', function(data) {
+            $('#password').val(data.password).attr('type', 'text');
+            setTimeout(function() {
+                $('#password').attr('type', 'password');
+            }, 10000);
+            showNotification('Contraseña generada con éxito', 'success');
+        });
     });
-}
-
-function showRegisterForm() {
-    $('.login-form').hide();
-    $('.register-form').show();
-}
-
-function showLoginForm() {
-    $('.register-form').hide();
-    $('.login-form').show();
-}
-
-$('#generate_password_btn').click(function() {
-    $.post('/generate-password', function(data) {
-        var passwordField = $('#password');
-        passwordField.val(data.password);
-        passwordField.attr('type', 'text');
-        setTimeout(function() {
-            passwordField.attr('type', 'password');
-        }, 5000);
-        showNotification('Contraseña generada con éxito', 'success');
-    });
-});
-
-$('#create_account_btn').click(function() {
-    var name = $('#name').val();
-    var password = $('#password').val();
-    $.post('/register', {name: name, password: password}, function(data) {
-        if(data.message) {
+    
+    $('#create_account_btn').click(function() {
+        var name = $('#name').val().trim();
+        var password = $('#password').val().trim();
+        $.post('/register', {name: name, password: password}, function(data) {
             showNotification(data.message, 'success');
             showLoginForm();
-        } else if(data.error) {
-            showNotification(data.error, 'error');
-        }
-    }).fail(function(jqXHR) {
-        var errorResponse = JSON.parse(jqXHR.responseText);
-        showNotification(errorResponse.error, 'error');
+        }).fail(function(jqXHR) {
+            showNotification(jqXHR.responseJSON.error, 'error');
+        });
     });
-});
-
-$('#login-form').submit(function(event) {
-    event.preventDefault();
-    var username = $('input[name="username"]').val();
-    var password = $('input[name="password"]').val();
-    $.ajax({
-        url: '/login',
-        type: 'POST',
-        data: {username: username, password: password},
-        dataType: 'json',
-        success: function(data) {
-            if(data.message) {
+    
+    $('#login-form').submit(function(event) {
+        event.preventDefault();
+        var username = $('input[name="username"]').val().trim();
+        var password = $('input[name="password"]').val().trim();
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data: {username: username, password: password},
+            success: function(data) {
                 showNotification(data.message, 'success');
-            } else if(data.error) {
-                showNotification(data.error, 'error');
+            },
+            error: function(jqXHR) {
+                showNotification(jqXHR.responseJSON.error, 'error');
             }
-        },
-        error: function(xhr, status, error) {
-            showNotification('Error al procesar la solicitud: ' + error, 'error');
-        }
+        });
     });
-});
     </script>
+    
 </body>
 </html>
   
