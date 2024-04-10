@@ -15,11 +15,13 @@ password_requirements = {
 }
 
 def check_password_requirements(password):
-    has_uppercase = len(re.findall(r'[A-Z]', password)) >= password_requirements['uppercase']
-    has_digit = len(re.findall(r'\d', password)) >= password_requirements['digits']
-    has_special = len(re.findall(r'\W', password)) >= password_requirements['special']
-    is_long_enough = len(password) >= password_requirements['min_length']
-    return has_uppercase and has_digit and has_special and is_long_enough
+    patterns = {
+        'uppercase': r'[A-Z]',
+        'digits': r'\d',
+        'special': r'\W'
+    }
+    return all(len(re.findall(pattern, password)) >= password_requirements[requirement]
+               for requirement, pattern in patterns.items()) and len(password) >= password_requirements['min_length']
 
 def generate_secure_password():
     alphabet = string.ascii_letters + string.digits + string.punctuation
@@ -35,34 +37,34 @@ def generate_password():
 
 @app.route('/register', methods=['POST'])
 def register():
-    name = request.form['name']
+    name = request.form['name'].strip()
     password = request.form['password']
 
-    if not check_password_requirements(password):
-        return jsonify({'error': 'La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, caracter especiales y números.'}), 400
-
     if name in users:
-        return jsonify({'error': 'El usuario ya existe'}), 400
+        return jsonify({'error': 'El nombre de usuario ya está en uso. Por favor, elige otro.'}), 400
+
+    if not check_password_requirements(password):
+        return jsonify({'error': 'La contraseña no cumple con los requisitos necesarios. Asegúrate de que tenga al menos 8 caracteres, incluyendo mayúsculas, minúsculas, caracteres especiales y números.'}), 400
 
     users[name] = {'password': password}
-    return jsonify({'message': 'Usuario registrado con éxito'})
+    return jsonify({'message': 'Usuario registrado con éxito.'})
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
+    username = request.form['username'].strip()
     password = request.form['password']
 
     if username not in users:
-        return jsonify({'error': 'Usuario no registrado'}), 400
+        return jsonify({'error': 'El nombre de usuario no está registrado. Por favor, verifica tus datos o regístrate.'}), 400
 
     if users[username]['password'] != password:
-        return jsonify({'error': 'Contraseña errónea, intente otra vez'}), 400
+        return jsonify({'error': 'La contraseña introducida es incorrecta. Por favor, inténtalo de nuevo.'}), 400
 
-    return jsonify({'message': 'Bienvenido, ' + username})
+    return jsonify({'message': f'Bienvenido, {username}'})
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)   
