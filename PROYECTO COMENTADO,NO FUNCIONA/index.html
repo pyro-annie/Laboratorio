@@ -43,79 +43,69 @@
         </div>
     </div>    
     <script>
-// Función para mostrar notificaciones con SweetAlert
+// Función para mostrar notificaciones en pantalla.
 function showNotification(message, type) {
+    // Llama a la función 'Swal.fire' de la librería SweetAlert para crear una notificación.
     Swal.fire({
-        icon: type, // El ícono de la notificación, que puede ser 'error' o 'success'
-        title: type === 'error' ? 'Error' : 'Success', // El título de la notificación, basado en el tipo
-        text: message, // El mensaje de la notificación
-        timer: 3000 // El tiempo en milisegundos que la notificación se mostrará antes de desaparecer
+        icon: type, // Establece el ícono de la notificación basado en el tipo ('error' o 'success').
+        title: type === 'error' ? 'Error' : 'Éxito', // El título cambia según el tipo de notificación.
+        text: message, // El mensaje de la notificación.
+        timer: 3000 // La notificación se cierra automáticamente después de 3 segundos.
     });
 }
 
-// Función para mostrar el formulario de registro
+// Función para mostrar el formulario de registro y ocultar el de inicio de sesión.
 function showRegisterForm() {
-    $('.login-form').hide(); // Oculta el formulario de inicio de sesión
-    $('.register-form').show(); // Muestra el formulario de registro
+    $('.login-form').hide(); // Oculta el formulario de inicio de sesión.
+    $('.register-form').show(); // Muestra el formulario de registro.
 }
 
-// Función para mostrar el formulario de inicio de sesión
+// Función para mostrar el formulario de inicio de sesión y ocultar el de registro.
 function showLoginForm() {
-    $('.register-form').hide(); // Oculta el formulario de registro
-    $('.login-form').show(); // Muestra el formulario de inicio de sesión
+    $('.register-form').hide(); // Oculta el formulario de registro.
+    $('.login-form').show(); // Muestra el formulario de inicio de sesión.
 }
 
-// Evento click para el botón de generar contraseña segura
+// Evento que se dispara al hacer clic en el botón de generar contraseña.
 $('#generate_password_btn').click(function() {
+    // Realiza una petición POST al servidor para generar una nueva contraseña.
     $.post('/generate-password', function(data) {
-        var passwordField = $('#password');
-        passwordField.val(data.password); // Asigna la contraseña generada al campo de contraseña
-        passwordField.attr('type', 'text'); // Cambia el tipo de input para mostrar la contraseña
+        $('#password').val(data.password).attr('type', 'text'); // Establece la contraseña generada en el campo de contraseña y cambia su tipo a texto.
         setTimeout(function() {
-            passwordField.attr('type', 'password'); // Vuelve a ocultar la contraseña después de 5 segundos
-        }, 5000);
-        showNotification('Contraseña generada con éxito', 'success'); // Muestra una notificación de éxito
+            $('#password').attr('type', 'password'); // Después de 10 segundos, cambia el tipo del campo de contraseña a 'password' para ocultarla.
+        }, 10000);
+        showNotification('Contraseña generada con éxito', 'success'); // Muestra una notificación de éxito.
     });
 });
 
-// Evento click para el botón de crear cuenta
+// Evento que se dispara al hacer clic en el botón de crear cuenta.
 $('#create_account_btn').click(function() {
-    var name = $('#name').val(); // Obtiene el nombre de usuario del campo correspondiente
-    var password = $('#password').val(); // Obtiene la contraseña del campo correspondiente
+    var name = $('#name').val().trim(); // Obtiene el nombre ingresado y elimina espacios en blanco.
+    var password = $('#password').val().trim(); // Obtiene la contraseña ingresada y elimina espacios en blanco.
+    // Realiza una petición POST al servidor para registrar una nueva cuenta.
     $.post('/register', {name: name, password: password}, function(data) {
-        if(data.message) {
-            showNotification(data.message, 'success'); // Muestra una notificación de éxito
-            showLoginForm(); // Cambia al formulario de inicio de sesión
-        } else if(data.error) {
-            showNotification(data.error, 'error'); // Muestra una notificación de error
-        }
+        showNotification(data.message, 'success'); // Muestra una notificación de éxito.
+        showLoginForm(); // Muestra el formulario de inicio de sesión.
     }).fail(function(jqXHR) {
-        // Manejo de errores de la solicitud AJAX
-        var errorResponse = JSON.parse(jqXHR.responseText);
-        showNotification(errorResponse.error, 'error'); // Muestra una notificación de error
+        showNotification(jqXHR.responseJSON.error, 'error'); // Si hay un error, muestra una notificación de error.
     });
 });
 
-// Evento submit para el formulario de inicio de sesión
+// Evento que se dispara al enviar el formulario de inicio de sesión.
 $('#login-form').submit(function(event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la manera predeterminada
-    var username = $('input[name="username"]').val(); // Obtiene el nombre de usuario del campo correspondiente
-    var password = $('input[name="password"]').val(); // Obtiene la contraseña del campo correspondiente
+    event.preventDefault(); // Evita que el formulario se envíe de la manera predeterminada.
+    var username = $('input[name="username"]').val().trim(); // Obtiene el nombre de usuario ingresado y elimina espacios en blanco.
+    var password = $('input[name="password"]').val().trim(); // Obtiene la contraseña ingresada y elimina espacios en blanco.
+    // Realiza una petición AJAX al servidor para iniciar sesión.
     $.ajax({
-        url: '/login', // La URL a la que se enviará la solicitud
-        type: 'POST', // El método HTTP para la solicitud
-        data: {username: username, password: password}, // Los datos que se enviarán al servidor
-        dataType: 'json', // El tipo de datos que se espera de la respuesta
+        url: '/login', // La URL a la que se envía la petición.
+        type: 'POST', // El método de la petición.
+        data: {username: username, password: password}, // Los datos enviados al servidor.
         success: function(data) {
-            if(data.message) {
-                showNotification(data.message, 'success'); // Muestra una notificación de éxito si hay un mensaje
-            } else if(data.error) {
-                showNotification(data.error, 'error'); // Muestra una notificación de error si hay un error
-            }
+            showNotification(data.message, 'success'); // Si el inicio de sesión es exitoso, muestra una notificación de éxito.
         },
-        error: function(xhr, status, error) {
-            // Manejo de errores de la solicitud AJAX
-            showNotification('Error al procesar la solicitud: ' + error, 'error'); // Muestra una notificación de error
+        error: function(jqXHR) {
+            showNotification(jqXHR.responseJSON.error, 'error'); // Si hay un error, muestra una notificación de error.
         }
     });
 });
