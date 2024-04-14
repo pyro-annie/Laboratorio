@@ -1,109 +1,65 @@
 def sumar_y_multiplicar(arreglo, multiplicador):
     """
-    Esta función toma un arreglo de números y un multiplicador, luego suma los elementos del arreglo y multiplica el resultado por el multiplicador.
-    La función también considera la ley de los signos al multiplicar.
+    Calcula la suma de los elementos de un arreglo y luego multiplica el resultado por un multiplicador.
 
     Parámetros:
-    - arreglo (list): Una lista de enteros que representa la serie numérica a sumar.
-    - multiplicador (int): El número entero por el cual se multiplicará la suma del arreglo.
+    arreglo (list): Una lista de números enteros.
+    multiplicador (int): Un número entero que se usará para multiplicar la suma del arreglo.
 
     Retorna:
-    - int: El resultado de la suma de los elementos del arreglo multiplicado por el multiplicador.
-           Si ambos, la suma y el multiplicador, son negativos, se multiplica sus valores absolutos.
-           Si el multiplicador es cero, el resultado será cero, independientemente de la suma del arreglo.
+    int: El resultado de sumar todos los elementos del arreglo y multiplicar la suma por el multiplicador.
     """
-    # Verifica si el multiplicador es cero, ya que cualquier número multiplicado por cero es cero.
+    # Si el multiplicador es cero, no es necesario realizar la operación
     if multiplicador == 0:
         return 0
-
-    # Calcula la suma de los elementos del arreglo.
-    suma = sum(arreglo)
-
-    # Si tanto la suma como el multiplicador son negativos, se multiplica sus valores absolutos.
-    # Esto es conforme a la ley de los signos: menos por menos es más.
-    if suma < 0 and multiplicador < 0:
-        return abs(suma) * abs(multiplicador)
-    else:
-        # En cualquier otro caso, se realiza la multiplicación directamente.
-        return suma * multiplicador
+    # Suma los elementos del arreglo y multiplica el resultado por el multiplicador
+    return sum(arreglo) * multiplicador
 
 def solicitar_entrada_numerica(mensaje, tipo='int'):
-    """
-    Pide al usuario que ingrese un número y verifica que sea del tipo especificado (entero o flotante).
-    Si el usuario ingresa un valor que no se puede convertir al tipo especificado, se le solicitará que intente de nuevo.
-
-    Parámetros:
-    - mensaje (str): El mensaje que se mostrará al usuario para pedirle que ingrese un número.
-    - tipo (str): El tipo de número que se espera ('int' para enteros o 'float' para flotantes).
-
-    Retorna:
-    - int o float: El número ingresado por el usuario, ya convertido al tipo especificado.
-    """
+    # Bucle infinito hasta que se reciba una entrada válida
     while True:
         entrada_usuario = input(mensaje)
         try:
-            # Intenta convertir la entrada del usuario al tipo especificado.
-            if tipo == 'int':
-                return int(entrada_usuario)
-            elif tipo == 'float':
-                return float(entrada_usuario)
+            # Intenta convertir la entrada a entero o flotante según el tipo
+            return int(entrada_usuario) if tipo == 'int' else float(entrada_usuario)
         except ValueError:
-            # Si la conversión falla, informa al usuario y pide que intente de nuevo.
+            # Si la conversión falla, solicita al usuario que ingrese un número válido
             print(f"Por favor, ingresa un número válido. {'Entero' if tipo == 'int' else 'Flotante'} esperado.")
 
 def solicitar_serie_numerica():
-    """
-    Solicita al usuario que ingrese una serie de números enteros separados por comas.
-    Verifica que todos los elementos ingresados sean enteros y que la cantidad de números esté entre 1 y 10.
-
-    Retorna:
-    - list: Una lista de enteros que representa la serie numérica ingresada por el usuario.
-    """
+    # Bucle infinito hasta que se reciba una serie numérica válida
     while True:
         entrada_usuario = input("Ingresa la serie numérica separada por comas (ejemplo: 1,2,3,4,5): ")
-        elementos = entrada_usuario.split(',')
-        serie_numerica = []
-
-        for elemento in elementos:
-            elemento = elemento.strip()  # Elimina espacios en blanco al inicio y final del elemento.
-            if elemento:  # Verifica que el elemento no esté vacío.
-                try:
-                    # Intenta convertir el elemento a entero y lo añade a la lista si es exitoso.
-                    numero = int(elemento)
-                    serie_numerica.append(numero)
-                except ValueError:
-                    # Si la conversión falla, informa al usuario y reinicia el proceso.
-                    print("Por favor, asegúrate de que todos los elementos sean números enteros.")
-                    break
-        else:
-            # Verifica que la lista tenga entre 1 y 10 elementos.
-            if serie_numerica and len(serie_numerica) <= 10:
+        try:
+            # Crea una lista de enteros a partir de la entrada del usuario
+            serie_numerica = [int(elemento) for elemento in entrada_usuario.split(',') if elemento.strip()]
+            # Verifica que la longitud de la serie esté dentro del rango permitido
+            if 1 <= len(serie_numerica) <= 10:
                 return serie_numerica
             else:
+                # Si la serie no tiene la longitud adecuada, informa al usuario
                 print("La serie debe contener entre 1 y 10 números.")
+        except ValueError:
+            # Si algún elemento no es un entero, informa al usuario
+            print("Por favor, asegúrate de que todos los elementos sean números enteros.")
 
 def main():
-    """
-    Función principal del programa. Solicita al usuario una serie numérica y un multiplicador,
-    luego llama a la función sumar_y_multiplicar para obtener y mostrar el resultado.
-    Permite al usuario repetir el proceso o terminar el programa.
-
-    No tiene parámetros ni retorna valores.
-    """
+    # Bucle principal del programa
     while True:
-        # Solicita al usuario una serie numérica y un multiplicador.
+        # Solicita al usuario una serie numérica
         serie_numerica = solicitar_serie_numerica()
+        # Solicita al usuario un número multiplicador
         multiplicador = solicitar_entrada_numerica("Ingresa el número multiplicador: ", 'int')
-
-        # Calcula y muestra el resultado de la operación.
+        # Calcula el resultado final utilizando la función sumar_y_multiplicar
         resultado_final = sumar_y_multiplicar(serie_numerica, multiplicador)
+        # Muestra el resultado de la operación
         print(f"El resultado de la operación es: {resultado_final}")
-
-        # Pregunta al usuario si desea repetir el proceso o terminar el programa.
+        # Pregunta al usuario si desea realizar otra operación
         if input("¿Deseas intentar de nuevo? Escribe 'si' para continuar o cualquier otra cosa para salir: ").lower() != 'si':
+            # Si el usuario decide no continuar, agradece su uso del programa y termina el bucle
             print("Gracias por utilizar el programa. ¡Hasta luego!")
             break
 
-# Verifica si el script se está ejecutando como programa principal y, en ese caso, llama a la función main.
+# Verifica si el script es el punto de entrada principal y, de ser así, ejecuta la función main
 if __name__ == "__main__":
     main()
