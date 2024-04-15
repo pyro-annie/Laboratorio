@@ -57,18 +57,45 @@ $figuras = [
 
         // Evento que detecta cambios en los selectores de forma de las figuras.
         $(".formaFigura").change(function() {
-            // Obtenemos el valor seleccionado y el ID de la figura afectada.
-            var figuraSeleccionada = $(this).val();
-            var idFigura = $(this).data('figura');
-            // Cambiamos la clase CSS de la figura para actualizar su forma visual.
-            $("#" + idFigura).removeClass("cuadrado circulo triangulo").addClass(figuraSeleccionada);
+        var figuraSeleccionada = $(this).val();
+        var idFigura = $(this).data('figura');
+        var figuraElement = $("#" + idFigura);
+
+        // Removemos las clases de todas las formas y añadimos la seleccionada.
+        figuraElement.removeClass("cuadrado circulo triangulo").addClass(figuraSeleccionada);
+
+        // Restablecemos los estilos CSS predeterminados antes de aplicar los nuevos.
+        figuraElement.css({
+            "background-color": "", // Limpia el color de fondo para cuadrados y círculos.
+            "border-bottom-color": "" // Limpia el color del borde para triángulos.
         });
+
+        // Aplicamos el color actualmente seleccionado para la figura.
+        var colorActual = figuraElement.data('colorActual');
+        if (figuraSeleccionada === 'triangulo') {
+            figuraElement.css("border-bottom-color", colorActual);
+        } else {
+            figuraElement.css("background-color", colorActual);
+        }
+
+        // Actualizamos el color actual en el elemento de datos.
+        figuraElement.data('colorActual', colorActual);
+    });
 
         // Evento que detecta cambios en los selectores de color de las figuras.
         $(".colorFigura").change(function() {
             // Obtenemos el color seleccionado y el ID de la figura afectada.
             var colorSeleccionado = $(this).val();
             var idFigura = $(this).data('figura');
+            var figuraElement = $("#" + idFigura);
+            // Guardamos el color seleccionado como el color actual de la figura.
+        figuraElement.data('colorActual', colorSeleccionado);
+                // Aplicamos el color seleccionado dependiendo del tipo de figura.
+            if (figuraElement.hasClass('triangulo')) {
+            figuraElement.css("border-bottom-color", colorSeleccionado);
+        } else {
+            figuraElement.css("background-color", colorSeleccionado);
+        }
             // Cambiamos el color de la figura según su tipo (borde o fondo).
             if ($("#" + idFigura).hasClass('triangulo')) {
                 $("#" + idFigura).css("border-bottom-color", colorSeleccionado);
@@ -92,7 +119,6 @@ $figuras = [
             // Actualizamos el nombre visualizado en la figura.
             $("#" + idFigura + " span").text(nombreSeleccionado);
         });
-
         // Función para calcular la luminancia de un color y determinar si es claro u oscuro.
         function getLuminance(color) {
             var rgb = hexToRgb(color);
