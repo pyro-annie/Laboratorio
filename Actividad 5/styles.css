@@ -1,0 +1,54 @@
+
+  .draggable {
+    position: absolute;
+    cursor: move;
+  }
+/* Cuadrado */
+.cuadrado {
+    width: 100px; /* Ancho del cuadrado */
+    height: 100px; /* Alto del cuadrado */
+    background-color: #f00; /* Color de fondo */
+  }
+  
+  /* Círculo */
+  .circulo {
+    width: 100px; /* Ancho del círculo */
+    height: 100px; /* Alto del círculo */
+    background-color: #00f; /* Color de fondo */
+    border-radius: 50%; /* Redondea las esquinas para formar un círculo */
+  }
+  
+/* Triángulo */
+.triangulo {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid green; /* Color por defecto del triángulo */
+    position: relative;
+}
+
+.triangulo span.nombreFigura {
+    position: absolute;
+    bottom: -30px; /* Ajusta esta propiedad para mover el nombre debajo del triángulo */
+    left: 50%;
+    color: #000; /* Cambia este valor según el color de fondo para que el texto sea legible */
+  }
+  
+
+  
+/* Centrar texto en figuras geométricas */
+.propiedad {    
+    position: relative;
+    width: 220px;
+
+}
+  
+  .cuadrado span, .circulo span, .triangulo span {
+    position: absolute; /* Posicionamiento absoluto para el texto */
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Ajuste fino para centrar exactamente */
+    white-space: nowrap; /* Evita que el texto se envuelva */
+  }
+    
