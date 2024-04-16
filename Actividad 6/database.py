@@ -1,99 +1,71 @@
-# Modelo de conexión para Excel usando pandas
 import pandas as pd
-
-class ExcelConexion:
-    def __init__(self, archivo):
-        self.archivo = archivo
-
-    def leer_datos(self):
-        return pd.read_excel(self.archivo)
-
-    def insertar_datos(self, datos):
-        datos.to_excel(self.archivo, index=False)
-
-    def actualizar_datos(self, datos_actualizados):
-        datos_actualizados.to_excel(self.archivo, index=False)
-
-    def eliminar_datos(self, condicion):
-        datos = pd.read_excel(self.archivo)
-        datos_filtrados = datos[~condicion]
-        datos_filtrados.to_excel(self.archivo, index=False)
-
-# Modelo de conexión para MySQL usando pymysql
-import pymysql
-
-class MySQLConexion:
-    def __init__(self, host, usuario, contraseña, base_datos):
-        self.conexion = pymysql.connect(host=host, user=usuario, password=contraseña, db=base_datos)
-
-    def leer_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            return cursor.fetchall()
-
-    def insertar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
-
-    def actualizar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
-
-    def eliminar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
-
-# Modelo de conexión para Access usando pyodbc
+import mysql.connector
 import pyodbc
 
-class AccessConexion:
-    def __init__(self, ruta_archivo):
-        self.conexion = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + ruta_archivo)
+# Conexión a Excel
+def conexion_excel(archivo):
+    # Leer y escribir en Excel
+    df = pd.read_excel(archivo)
+    return df
 
-    def leer_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            return cursor.fetchall()
+# Conexión a MySQL
+def conexion_mysql(servidor, usuario, contraseña, base_datos):
+    # Crear conexión a MySQL
+    conexion = mysql.connector.connect(
+        host=servidor,
+        user=usuario,
+        password=contraseña,
+        database=base_datos
+    )
+    return conexion
 
-    def insertar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
+# Conexión a Access
+def conexion_access(archivo):
+    # Crear conexión a Access
+    conexion = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + archivo + ';')
+    return conexion
 
-    def actualizar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
+# Conexión a TXT
+def conexion_txt(archivo):
+    # Leer y escribir en TXT
+    with open(archivo, 'r') as file:
+        contenido = file.read()
+    return contenido
 
-    def eliminar_datos(self, consulta):
-        with self.conexion.cursor() as cursor:
-            cursor.execute(consulta)
-            self.conexion.commit()
+# Funciones CRUD para Eventos, Patrocinadores y Participantes
+# Ejemplo para Eventos
+def crear_evento(conexion, nombre, descripcion, ubicacion, fecha, horario):
+    # Código para insertar un nuevo evento en la base de datos
+    pass
 
-# Modelo de conexión para archivos de texto
-class TxtConexion:
-    def __init__(self, archivo):
-        self.archivo = archivo
+def leer_eventos(conexion):
+    # Código para leer eventos de la base de datos
+    pass
 
-    def leer_datos(self):
-        with open(self.archivo, 'r') as file:
-            return file.readlines()
+def actualizar_evento(conexion, id_evento, nombre, descripcion, ubicacion, fecha, horario):
+    # Código para actualizar un evento existente en la base de datos
+    pass
 
-    def insertar_datos(self, datos):
-        with open(self.archivo, 'a') as file:
-            file.write(datos + '\n')
+def eliminar_evento(conexion, id_evento):
+    # Código para eliminar un evento de la base de datos
+    pass
 
-    def actualizar_datos(self, datos_actualizados):
-        with open(self.archivo, 'w') as file:
-            file.writelines(datos_actualizados)
+# Ejemplo de uso
+if __name__ == '__main__':
+    # Conectar a Excel
+    df_excel = conexion_excel('eventos.xlsx')
 
-    def eliminar_datos(self, condicion):
-        with open(self.archivo, 'r') as file:
-            lineas = file.readlines()
-        with open(self.archivo, 'w') as file:
-            for linea in lineas:
-                if not condicion(linea):
-                    file.write(linea)
+    # Conectar a MySQL
+    conexion_db = conexion_mysql('localhost', 'usuario', 'contraseña', 'base_datos')
+
+    # Conectar a Access
+    conexion_access_db = conexion_access('eventos.accdb')
+
+    # Conectar a TXT
+    contenido_txt = conexion_txt('eventos.txt')
+
+    # Operaciones CRUD para Eventos
+    crear_evento(conexion_db, 'Concierto de Rock', 'Concierto al aire libre', 'Parque Central', '2024-05-01', '20:00')
+    eventos = leer_eventos(conexion_db)
+    actualizar_evento(conexion_db, 1, 'Concierto de Jazz', 'Concierto en sala cerrada', 'Teatro Municipal', '2024-06-01', '19:00')
+    eliminar_evento(conexion_db, 2)
