@@ -47,9 +47,16 @@ $figuras = [
             $("#" + idFigura).removeClass("cuadrado circulo triangulo").addClass(figuraSeleccionada);
         });
 
-        $(".colorFigura").change(function() {
+$(".colorFigura").change(function() {
             var colorSeleccionado = $(this).val();
             var idFigura = $(this).data('figura');
+            var figuraElement = $("#" + idFigura);
+        figuraElement.data('colorActual', colorSeleccionado);
+            if (figuraElement.hasClass('triangulo')) {
+            figuraElement.css("border-bottom-color", colorSeleccionado);
+        } else {
+            figuraElement.css("background-color", colorSeleccionado);
+        }
             if ($("#" + idFigura).hasClass('triangulo')) {
                 $("#" + idFigura).css("border-bottom-color", colorSeleccionado); 
             } else {

@@ -39,9 +39,9 @@
   
 /* Centrar texto en figuras geométricas */
 .propiedad {    
-    position: relative;
+    position: absolute;
     width: 220px;
-
+    top: 0;
 }
   
   .cuadrado span, .circulo span, .triangulo span {
