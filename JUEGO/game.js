@@ -110,55 +110,41 @@ function drawEnemy(enemy, ctx) {
     ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height); 
 } 
 function handleGameOver() {
-    // Detener el bucle del juego
+    // Detiene el bucle del juego
     cancelAnimationFrame(animationFrameId);
 
-    // Calcular el tiempo de supervivencia de cada jugador
-    player1.timeAlive = (Date.now() - startTime) / 1000;
-    player2.timeAlive = (Date.now() - startTime) / 1000;
-
-    // Actualizar las puntuaciones en la pantalla de 'Game Over'
+    // Actualiza las puntuaciones en la pantalla de 'Game Over'
     document.getElementById('player1Score').textContent = 'Tiempo Jugador 1: ' + player1.timeAlive.toFixed(2) + ' segundos';
     document.getElementById('player2Score').textContent = 'Tiempo Jugador 2: ' + player2.timeAlive.toFixed(2) + ' segundos';
 
-    // Mostrar la pantalla de 'Game Over'
-    var gameOverDisplay = document.getElementById('gameOverDisplay');
-    gameOverDisplay.style.display = 'block';
+    // Muestra la pantalla de 'Game Over' y oculta el canvas del juego
+    document.getElementById('gameOverDisplay').style.display = 'block';
+    document.getElementById('gameCanvas').style.display = 'none';
 
-    // Ocultar el canvas del juego
-    var gameCanvas = document.getElementById('gameCanvas');
-    gameCanvas.style.display = 'none';
+    // Muestra el botón de revancha
+    document.getElementById('rematchButton').style.display = 'block';
 
-    // Mostrar el botón de revancha
-    var rematchButton = document.getElementById('rematchButton');
-    rematchButton.style.display = 'block';
-
-    // Determinar y mostrar el ganador
+    // Determina y muestra el ganador
     determineWinner();
 }
 
-function determineWinner() {
-    // Comparar el tiempo de supervivencia de los jugadores para determinar el ganador
-    if (player1.timeAlive > player2.timeAlive) {
-        document.getElementById('winner').textContent = '¡Jugador 1 gana!';
-    } else if (player2.timeAlive > player1.timeAlive) {
-        document.getElementById('winner').textContent = '¡Jugador 2 gana!';
-    } else {
-        document.getElementById('winner').textContent = '¡Es un empate!';
-    }
-}
 
-function playerLost(player) {
-    player.alive = false;
-    player.x = -100; // Mueve la nave fuera de la pantalla
-    player.y = -100;
-
-    // Verifica si ambos jugadores han perdido para detener el juego
-    if (!player1.alive && !player2.alive) {
-        gameRunning = false; // Detiene el juego
-        handleGameOver();
+    function playerLost(player) {
+        if (player.alive) {
+            player.alive = false;
+            // Calcula el tiempo de supervivencia en el momento de la pérdida
+            player.timeAlive = (Date.now() - player.startTime) / 1000;
+            // Mueve la nave fuera de la pantalla
+            player.x = -100;
+    
+            // Verifica si ambos jugadores han perdido para detener el juego
+            if (!player1.alive && !player2.alive) {
+                gameRunning = false;
+                handleGameOver();
+            }
+        }
     }
-}
+
 
 // Función para determinar el ganador
 function determineWinner() {
@@ -168,26 +154,17 @@ function determineWinner() {
     } else if (player2.timeAlive > player1.timeAlive) {
         winnerText = '¡Jugador 2 gana!';
     } else {
-        winnerText = '¡Es un empate!';
+        // En caso de empate, decide un ganador por otro criterio
+        winnerText = decideTieBreaker();
     }
     document.getElementById('winner').textContent = winnerText;
 }
+
 function updateScore(player) {
     // Actualizar la puntuación del jugador
     document.getElementById(player.id + 'Score').textContent = 'Puntuación: ' + player.score;
 }
 
-function playerLost(player) {
-    player.alive = false;
-    player.x = -100; // Mueve la nave fuera de la pantalla
-    player.y = -100;
-
-    // Verifica si ambos jugadores han perdido para detener el juego
-    if (!player1.alive && !player2.alive) {
-        gameRunning = false; // Detiene el juego
-        handleGameOver();
-    }
-}
 
 // Función para detectar colisiones y manejar el fin del juego
 function checkCollisions(players, enemies) {
@@ -210,45 +187,9 @@ function checkCollisions(players, enemies) {
     }
 }
 
-// Función para actualizar el tiempo de supervivencia del jugador
-function playerLost(player) {
-    player.alive = false;
-    player.timeAlive = (Date.now() - startTime) / 1000;
-    // Mover la nave fuera de la pantalla (si es necesario)
-    // updateScore(player); // Actualizar la puntuación aquí si es necesario
-}
 
 // Función para mostrar la pantalla de "Game Over" y determinar el ganador
 // Función para manejar el fin del juego
-function handleGameOver() {
-    // Detener el juego
-    gameRunning = false;
-    cancelAnimationFrame(animationFrameId);
-
-    // Calcular el tiempo de supervivencia de cada jugador
-    player1.timeAlive = (Date.now() - startTime) / 1000;
-    player2.timeAlive = (Date.now() - startTime) / 1000;
-
-    // Actualizar las puntuaciones en la pantalla de 'Game Over'
-    document.getElementById('player1Score').textContent = 'Tiempo Jugador 1: ' + player1.timeAlive.toFixed(2) + ' segundos';
-    document.getElementById('player2Score').textContent = 'Tiempo Jugador 2: ' + player2.timeAlive.toFixed(2) + ' segundos';
-
-    // Mostrar la pantalla de 'Game Over'
-    var gameOverDisplay = document.getElementById('gameOverDisplay');
-    gameOverDisplay.style.display = 'block';
-
-    // Ocultar el canvas del juego
-    var gameCanvas = document.getElementById('gameCanvas');
-    gameCanvas.style.display = 'none';
-
-    // Mostrar el botón de revancha
-    var rematchButton = document.getElementById('rematchButton');
-    rematchButton.style.display = 'block';
-
-    // Determinar y mostrar el ganador
-    determineWinner();
-}
-// Asegúrate de llamar a handleGameOver() cuando ambos jugadores estén muertos.
 
 function updateDisplayWithPlayerInitials(initials) { 
     // Actualiza el elemento de visualización con las iniciales del jugador 
@@ -275,60 +216,71 @@ function setupRematchButton() {
     // Agregar el manejador de evento de clic para reiniciar el juego 
     rematchButton.addEventListener('click', restartGame); 
 } 
-function restartGame() {
-    // Cancelar el bucle del juego anterior si está en ejecución
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-    }
 
-    // Restablecer las variables del estado del juego
-    gameRunning = true;
-    gameOver = false;
-    lastFiredPlayer1 = Date.now();
-    lastFiredPlayer2 = Date.now();
-    startTime = Date.now();
-    elapsedTime = 0;
-    // Restablecer el estado de los jugadores
-    player1.alive = true;
-    player2.alive = true;
-    player1.score = 0;
-    player2.score = 0;
-    player1.timeAlive = 0;
-    player2.timeAlive = 0;
-    // Limpiar cualquier enemigo o proyectil existente
-    redEnemies.length = 0;
-    whiteEnemies.length = 0;
-    player1Projectiles.length = 0;
-    player2Projectiles.length = 0;
-    // Restablecer el canvas y su contexto
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Crear naves y enemigos nuevamente si es necesario
-    player1 = createShip('blue', { up: 'w', left: 'a', down: 's', right: 'd' });
-    player2 = createShip('green', { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'ArrowRight' });
-    redEnemies = Array(5).fill().map(createRedEnemy);
-    whiteEnemies = Array(5).fill().map(createWhiteEnemy);
-    // Establecer las coordenadas iniciales de las naves
-    player1.x = canvas.width / 4;
-    player1.y = canvas.height / 50;
-    player2.x = canvas.width / 4;
-    player2.y = canvas.height - 50;
-    // Ocultar los elementos de 'Game Over' y 'Revancha'
-    document.getElementById('gameOverDisplay').style.display = 'none';
-    document.getElementById('rematchButton').style.display = 'none';
-    // Restablecer la visualización de las iniciales del jugador
-    document.getElementById('playerInitialsDisplay').textContent = '';
-    // Restablecer event listeners si es necesario
-    document.removeEventListener('keydown', handleKey);
-    document.removeEventListener('keyup', handleKey);
-    document.addEventListener('keydown', (event) => handleKey(event, true));
-    document.addEventListener('keyup', (event) => handleKey(event, false));
-    // Mostrar el canvas del juego
-    var gameCanvas = document.getElementById('gameCanvas');
-    gameCanvas.style.display = 'block';
-    // Iniciar el bucle del juego nuevamente
-    // Solicitar el siguiente frame de animación
-    animationFrameId = requestAnimationFrame(gameLoop);
-}
+    function restartGame() {
+        // Cancelar el bucle del juego anterior si está en ejecución
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+    
+        // Restablecer las variables del estado del juego
+        gameRunning = true;
+        gameOver = false;
+        lastFiredPlayer1 = Date.now();
+        lastFiredPlayer2 = Date.now();
+        startTime = Date.now();
+        elapsedTime = 0;
+    
+        // Restablecer el estado de los jugadores
+        player1.alive = true;
+        player2.alive = true;
+        player1.score = 0;
+        player2.score = 0;
+        player1.timeAlive = 0;
+        player2.timeAlive = 0;
+    
+        // Limpiar cualquier enemigo o proyectil existente
+        redEnemies.length = 0;
+        whiteEnemies.length = 0;
+        player1Projectiles.length = 0;
+        player2Projectiles.length = 0;
+    
+        // Restablecer el canvas y su contexto
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+        // Crear naves y enemigos nuevamente si es necesario
+        player1 = createShip('blue', { up: 'w', left: 'a', down: 's', right: 'd' });
+        player2 = createShip('green', { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'ArrowRight' });
+        redEnemies = Array(5).fill().map(createRedEnemy);
+        whiteEnemies = Array(5).fill().map(createWhiteEnemy);
+    
+        // Establecer las coordenadas iniciales de las naves
+        player1.x = canvas.width / 4;
+        player1.y = canvas.height / 50;
+        player2.x = canvas.width / 4;
+        player2.y = canvas.height - 50;
+    
+        // Ocultar los elementos de 'Game Over' y 'Revancha'
+        document.getElementById('gameOverDisplay').style.display = 'none';
+        document.getElementById('rematchButton').style.display = 'none';
+    
+        // Restablecer la visualización de las iniciales del jugador
+        document.getElementById('playerInitialsDisplay').textContent = '';
+    
+        // Restablecer event listeners si es necesario
+        document.removeEventListener('keydown', handleKey);
+        document.removeEventListener('keyup', handleKey);
+        document.addEventListener('keydown', (event) => handleKey(event, true));
+        document.addEventListener('keyup', (event) => handleKey(event, false));
+    
+        // Mostrar el canvas del juego
+        var gameCanvas = document.getElementById('gameCanvas');
+        gameCanvas.style.display = 'block';
+    
+        // Iniciar el bucle del juego nuevamente
+        animationFrameId = requestAnimationFrame(gameLoop);
+    }
+    
 
 
 
@@ -357,12 +309,6 @@ function sendScoresToPHP(playerInitials, player1Time, player2Time) {
         console.error('Error:', error); 
     }); 
 } 
-function playerLost(player) { 
-    player.alive = false; 
-    // Ocultar la nave estableciendo su posición fuera de la pantalla 
-    player.x = -100; 
-    player.y = -100; 
-} 
 function drawTime(ctx, time) { 
     ctx.font = '20px Arial'; 
     ctx.fillStyle = 'white'; 
@@ -388,7 +334,9 @@ function initGame() {
     canvas.width = 800; // Ancho del canvas 
     canvas.height = 600; // Alto del canvas 
     player1 = createShip('blue', { up: 'w', left: 'a', down: 's', right: 'd' }); 
-    player2 = createShip('green', { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'ArrowRight' }); 
+    player2 = createShip('green', { up: 'ArrowUp', left: 'ArrowLeft', down: 'ArrowDown', right: 'ArrowRight' });
+    player1.startTime = Date.now();
+    player2.startTime = Date.now();
     redEnemies = Array(5).fill().map(createRedEnemy); // Crea 5 enemigos rojos 
     whiteEnemies = Array(5).fill().map(createWhiteEnemy); // Crea 5 enemigos blancos 
     createStars(); 
