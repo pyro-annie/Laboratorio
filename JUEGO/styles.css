@@ -1,0 +1,23 @@
+/* styles.css */
+#gameCanvas {
+    background-color: black;
+    display: block;
+    margin: auto;
+    width: 800px; /* Ancho del canvas */
+    height: 600px; /* Alto del canvas */
+  }
+  /* Agrega estilos para el botón en tu archivo CSS */
+#rematchButton {
+  /* Estilos básicos */
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#rematchButton:hover {
+  /* Cambia el color de fondo y texto al pasar el mouse */
+  background-color: red;
+  color: white;
+}
