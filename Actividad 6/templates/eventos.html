@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Eventos</title>
+</head>
+<body>
+    <h1>Eventos</h1>
+    <ul>
+        {% for evento in eventos %}
+            <li>
+                <h2>{{ evento.nombre }}</h2>
+                <p>{{ evento.descripcion }}</p>
+                <p>Ubicación: {{ evento.ubicacion }}</p>
+                <p>Fecha: {{ evento.fecha }}</p>
+                <p>Horario: De {{ evento.horario_inicio }} a {{ evento.horario_fin }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

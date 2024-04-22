@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Participantes</title>
+</head>
+<body>
+    <h1>Participantes Registrados</h1>
+    <ul>
+        {% for participante in participantes %}
+            <li>
+                <h2>{{ participante.nombre }}</h2>
+                <p>Contacto: {{ participante.contacto }}</p>
+                <p>Preferencias Alimenticias: {{ participante.preferencias_alimenticias }}</p>
+                <p>Asistencia: {{ 'Sí' if participante.asistencia else 'No' }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Volver al inicio</a>
+</body>
+</html>

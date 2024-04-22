@@ -1,0 +1,2 @@
+SERGIO ALEJANDRO,contreras lopes,Carnivoro,True
+Fernando Ferrer,04125897745,Vegetariano,False
