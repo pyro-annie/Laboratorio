@@ -5,51 +5,35 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Asegúrate de validar y limpiar adecuadamente los datos de entrada
     $playerName = $_POST['playerName'];
-    $score = $_POST['score'];
-    // Identifica si es Player1 o Player2
-    $playerId = $playerName == 'Player1' ? 1 : 2;
+    $player1TimeAlive = $_POST['player1TimeAlive'];
+    $player2TimeAlive = $_POST['player2TimeAlive'];
+    
     // Guarda la puntuación en la sesión
-    $_SESSION['scores'][$playerId][] = $score;
+    $_SESSION['scores'][$playerName] = array('player1' => $player1TimeAlive, 'player2' => $player2TimeAlive);
+    
+    // Guardar las puntuaciones en un archivo
+    saveScoresToFile($playerName, $player1TimeAlive, $player2TimeAlive);
 }
 
-// Función para guardar una nueva puntuación
-function saveScore($playerName, $score) {
-    // Asegúrate de validar y limpiar adecuadamente los datos de entrada
-    $playerId = $playerName == 'Player1' ? 1 : 2;
-    // Guarda la puntuación en la sesión
-    $_SESSION['scores'][$playerId][] = $score;
+// Función para guardar las puntuaciones en un archivo de texto
+function saveScoresToFile($playerName, $player1TimeAlive, $player2TimeAlive) {
+    $filename = 'scores.txt';
+    $content = "{$playerName}: Player 1 - {$player1TimeAlive}, Player 2 - {$player2TimeAlive}\n";
+    file_put_contents($filename, $content, FILE_APPEND);
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $playerInitials = $_POST['playerInitials'];
-    $player1Time = $_POST['player1Time'];
-    $player2Time = $_POST['player2Time'];
-    saveScoresToFile($playerInitials, $player1Time, $player2Time);
-}
+
 // Función para mostrar las puntuaciones guardadas
 function displayScores() {
-    if (!empty($_SESSION['scores'])) {
+    if (file_exists('scores.txt')) {
+        $scores = file_get_contents('scores.txt');
         echo "<h2>Puntuaciones:</h2>";
-        foreach ($_SESSION['scores'] as $playerId => $scores) {
-            echo "<h3>Player" . $playerId . "</h3>";
-            foreach ($scores as $score) {
-                echo "<p>Puntuación: " . htmlspecialchars($score) . "</p>";
-            }
-        }
+        echo nl2br($scores);
     } else {
         echo "<p>No hay puntuaciones guardadas aún.</p>";
     }
 }
 
-// Modificar la función para guardar las puntuaciones en un archivo de texto
-function saveScoresToFile($playerInitials, $player1Time, $player2Time) {
-    $filename = 'scores.txt';
-    $content = "{$playerInitials}: Player 1 - {$player1Time}, Player 2 - {$player2Time}\n";
-    file_put_contents($filename, $content, FILE_APPEND);
-}
-
-
 displayScores();
-
 ?>
 
 <!DOCTYPE html>
@@ -62,9 +46,7 @@ displayScores();
 <body>
     <div id="playerInitialsDisplay"></div>
     <div id="menu">
-        <button id="singleplayer">Solo</button>
-        <button id="multiplayer">Co-op</button>
-        <button id="scores">Puntuaciones</button>
+    <button id="uploadScores">Subir Puntuajes</button>
     </div>
     <canvas id="gameCanvas"></canvas>
     <!-- Elementos para la pantalla de Game Over -->
@@ -76,5 +58,20 @@ displayScores();
         <button id="rematchButton">Revancha</button>
     </div>
     <script src="game.js"></script>
+    <script>
+        // Asegúrate de que este código se ejecute después de que se haya cargado el archivo game.js
+        document.getElementById('uploadScores').addEventListener('click', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'juego.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                // Manejar la respuesta del servidor aquí
+                console.log(this.responseText);
+            };
+            xhr.send('playerName=' + encodeURIComponent(playerInitials) +
+                     '&player1TimeAlive=' + encodeURIComponent(player1.timeAlive) +
+                     '&player2TimeAlive=' + encodeURIComponent(player2.timeAlive));
+        });
+    </script>
 </body>
 </html>
