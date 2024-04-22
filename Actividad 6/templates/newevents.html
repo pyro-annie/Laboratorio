@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Evento</title>
+</head>
+<body>
+    <h1>Agregar Nuevo Evento</h1>
+    <form action="/agregar_evento" method="post">
+        <label for="nombre">Nombre del Evento:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea><br><br>
+
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" required><br><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br><br>
+
+        <label for="horario_inicio">Horario de Inicio:</label>
+        <input type="time" id="horario_inicio" name="horario_inicio" required><br><br>
+
+        <label for="horario_fin">Horario de Fin:</label>
+        <input type="time" id="horario_fin" name="horario_fin" required><br><br>
+
+        <input type="submit" value="Guardar Evento">
+    </form>
+</body>
+</html>

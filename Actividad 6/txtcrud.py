@@ -12,7 +12,6 @@ def guardar_evento(evento):
     file_path = os.path.join(folder_path, 'eventos.txt')
     with open(file_path, 'a') as file:
         file.write(f"{evento['nombre']},{evento['descripcion']},{evento['ubicacion']},{evento['fecha']},{evento['horario_inicio']},{evento['horario_fin']}\n")
-
 def guardar_participante(participante):
     file_path = os.path.join(folder_path, 'participantes.txt')
     with open(file_path, 'a') as file:
