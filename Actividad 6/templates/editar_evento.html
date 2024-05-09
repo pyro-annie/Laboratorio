@@ -1,0 +1,32 @@
+<!-- editar_evento.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Evento</title>
+</head>
+<body>
+    <h1>Editar Evento</h1>
+    <form method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ evento.nombre }}" required><br>
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required>{{ evento.descripcion }}</textarea><br>
+
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" value="{{ evento.ubicacion }}" required><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" value="{{ evento.fecha }}" required><br>
+
+        <label for="horario_inicio">Horario de Inicio:</label>
+        <input type="time" id="horario_inicio" name="horario_inicio" value="{{ evento.horario_inicio }}" required><br>
+
+        <label for="horario_fin">Horario de Fin:</label>
+        <input type="time" id="horario_fin" name="horario_fin" value="{{ evento.horario_fin }}" required><br>
+
+        <button type="submit">Actualizar Evento</button>
+    </form>
+</body>
+</html>

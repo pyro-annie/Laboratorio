@@ -1,2 +1,1 @@
-Inaguracion Python,Prueba de python,Mi casa ,2024-04-23,16:26,06:28
-Prueba python,2da prueba de python,Caracas,2024-04-25,03:29,17:31
+Inaguracion Python,Prueba,Caracas,2024-04-03,05:36,05:35

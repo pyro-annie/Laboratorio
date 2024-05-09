@@ -1,0 +1,11 @@
+<!-- Ejemplo de lista de eventos con opciones para editar y eliminar -->
+<ul>
+    {% for evento in eventos %}
+    <li>
+        {{ evento.nombre }} - <a href="{{ url_for('editar_evento', id=evento.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('eliminar_evento', id=evento.id) }}">
+            <button type="submit">Eliminar</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>

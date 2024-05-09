@@ -1,0 +1,26 @@
+<!-- editar_participante.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Participante</title>
+</head>
+<body>
+    <h1>Editar Participante</h1>
+    <form method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ participante.nombre }}" required><br>
+
+        <label for="contacto">Contacto:</label>
+        <input type="text" id="contacto" name="contacto" value="{{ participante.contacto }}" required><br>
+
+        <label for="preferencias_alimenticias">Preferencias Alimenticias:</label>
+        <input type="text" id="preferencias_alimenticias" name="preferencias_alimenticias" value="{{ participante.preferencias_alimenticias }}" required><br>
+
+        <label for="asistencia">Asistencia:</label>
+        <input type="checkbox" id="asistencia" name="asistencia" {{ 'checked' if participante.asistencia else '' }}><br>
+
+        <button type="submit">Actualizar Participante</button>
+    </form>
+</body>
+</html>

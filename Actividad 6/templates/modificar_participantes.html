@@ -1,0 +1,21 @@
+<!-- modificar_participantes.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Participantes</title>
+</head>
+<body>
+    <h1>Modificar Participantes</h1>
+    <ul>
+        {% for participante in participantes %}
+        <li>
+            {{ participante.nombre }} - <a href="{{ url_for('editar_participante', id=participante.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('eliminar_participante', id=participante.id) }}">
+                <button type="submit">Eliminar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

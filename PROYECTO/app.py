@@ -39,14 +39,21 @@ def generate_password():
 def register():
     name = request.form['name'].strip()
     password = request.form['password']
+    phone = request.form['phone']
+    email = request.form['email']
 
     if name in users:
         return jsonify({'error': 'El nombre de usuario ya está en uso. Por favor, elige otro.'}), 400
 
     if not check_password_requirements(password):
         return jsonify({'error': 'La contraseña no cumple con los requisitos necesarios. Asegúrate de que tenga al menos 8 caracteres, incluyendo mayúsculas, minúsculas, caracteres especiales y números.'}), 400
+        
+    if not name or not password or not phone or not email:
+        return jsonify({'error': 'Todos los campos son obligatorios.'}), 400
 
-    users[name] = {'password': password}
+
+
+    users[name] = {'password': password, 'phone': phone, 'email': email}
     return jsonify({'message': 'Usuario registrado con éxito.'})
 
 @app.route('/login', methods=['POST'])
@@ -67,4 +74,4 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)   
+    app.run(debug=True)

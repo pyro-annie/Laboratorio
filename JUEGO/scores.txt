@@ -1,7 +1,2 @@
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - 1.842, Player 2 - 5.742
-: Player 1 - undefined, Player 2 - undefined
+: Player 1 - 165.1, Player 2 - 19.629: Player 1 - 15.503, Player 2 - 10.286
+: Player 1 - 45.88, Player 2 - 7.462

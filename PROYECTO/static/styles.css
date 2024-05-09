@@ -15,6 +15,7 @@
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   border-radius: 30%;
+  color: #0303f7;
 }
 .form input {
   font-family: "Roboto", sans-serif;
@@ -26,6 +27,7 @@
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
+  width: 230px;
 }
 .form button {
   font-family: "Roboto", sans-serif;
@@ -46,7 +48,7 @@
 }
 .form .message {
   margin: 15px 0 0;
-  color: #b3b3b3;
+  color: #ffffff;
   font-size: 12px;
 }
 .form .message a {
