@@ -29,6 +29,13 @@
   font-size: 14px;
   width: 230px;
 }
+.forgot-password-link {
+  color: #0000EE; /* Color azul típico de los enlaces */
+  text-decoration: underline; /* Subrayado para parecer un enlace */
+  display: block; /* Hacer que ocupe su propia línea como un párrafo */
+  margin-top: 10px; /* Espacio adicional si es necesario */
+}
+
 .form button {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;

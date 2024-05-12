@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 users = {}
 
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com)$')
+
 password_requirements = {
     'uppercase': 1,
     'digits': 1,
@@ -35,12 +37,16 @@ def generate_secure_password():
 def generate_password():
     return jsonify({'password': generate_secure_password()})
 
+@app.route('/forgot-account')
+def forgot_account():
+    return render_template('forgotaccount.html')
+
 @app.route('/register', methods=['POST'])
 def register():
     name = request.form['name'].strip()
     password = request.form['password']
-    phone = request.form['phone']
-    email = request.form['email']
+    phone = request.form['phone'].strip()
+    email = request.form['email'].strip()
 
     if name in users:
         return jsonify({'error': 'El nombre de usuario ya está en uso. Por favor, elige otro.'}), 400
@@ -50,9 +56,10 @@ def register():
         
     if not name or not password or not phone or not email:
         return jsonify({'error': 'Todos los campos son obligatorios.'}), 400
-
-
-
+    
+    if not EMAIL_REGEX.match(email):
+        return jsonify({'error': 'Por favor, ingresa un correo electrónico válido de Gmail o Outlook.'}), 400
+    
     users[name] = {'password': password, 'phone': phone, 'email': email}
     return jsonify({'message': 'Usuario registrado con éxito.'})
 
