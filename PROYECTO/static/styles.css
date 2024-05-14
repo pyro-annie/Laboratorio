@@ -20,18 +20,13 @@ body {
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
   border-radius: 10px;
 }
-/* .form {
-  position: relative;
-  z-index: 1;
-  background: #00000079;
-  max-width: 360px;
-  margin: 0 auto 100px;
-  padding: 45px;
+.login-page h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: #fff;
   text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  border-radius: 30%;
-  color: #0303f7;
-} */
+}
+
 .login-page .form {
   position: relative;
 }
@@ -181,6 +176,26 @@ body {
   }
 }
 
+.register-form h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+/* Estilos para los formularios */
+.login-form,
+.register-form {
+  transition: opacity 0.5s ease;
+}
+
+/* Animación de desvanecimiento */
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
 
 .register{
   position: relative;
@@ -195,6 +210,7 @@ body {
   margin-top: 40px;
   letter-spacing: 4px
 }
+
 .register:hover {
   background: #03e9f4;
   color: #fff;
@@ -408,7 +424,7 @@ body {
 }
 
 .google-btn {
-  /* display: inline-flex; */
+/*   display: inline-flex;*/
   display: none;
   align-items: center;
   background-color: #ffffff; /* Color de fondo azul de Google */

@@ -20,6 +20,7 @@
         <section class="form">
             <!-- Formulario de Registro -->
             <form class="register-form" id="register-form" style="display:none;">
+                <h2>Registro</h2>
                 <div class="form">
                     <input type="text" id="name" placeholder="" required/>   
                     <label for="name">Nombre de Usuario</label>     
@@ -46,6 +47,7 @@
             </form>        
             <!-- Formulario de Inicio de Sesión -->
             <form class="login-form" id="login-form">
+                <h2>Login</h2>
                 <div class="form">
                     <input type="text" name="username" placeholder="" required/> 
                     <label for="username">Nombre de Usuario</label>     
@@ -75,6 +77,7 @@
 const phoneInputField = document.querySelector("#phone");
 const phoneInput = window.intlTelInput(phoneInputField, {
   utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  preferredCountries: ["ve", "es", "us"],
 });
 
 // Referencia al elemento de información
@@ -100,13 +103,13 @@ function showNotification(message, type) {
 
 // Funciones para alternar entre formularios
 function showRegisterForm() {
-  $('.login-form').hide();
-  $('.register-form').fadeIn();
+  $('.login-form').addClass('fade-out').hide();
+  $('.register-form').removeClass('fade-out').addClass('fade-in').fadeIn();
 }
 
 function showLoginForm() {
-  $('.register-form').hide();
-  $('.login-form').fadeIn();
+  $('.register-form').addClass('fade-out').hide();
+  $('.login-form').removeClass('fade-out').addClass('fade-in').fadeIn();
 }
 
 // Evento para generar contraseña segura
