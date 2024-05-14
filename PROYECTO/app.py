@@ -83,13 +83,6 @@ def load_or_create_workbook(file_path):
         return wb
 # Definir los encabezados de las columnas
 headers = ['Nombre de Usuario', 'Contraseña', 'Correo Electrónico', 'Número de Teléfono']
-
-# Agregar los encabezados al archivo Excel
-# ws.append(headers)
-
-# Guardar el archivo Excel
-# wb.save('cuentas.xlsx')
-
 # Cargar el archivo Excel existente o crear uno nuevo si no existe
 file_path = 'cuentas.xlsx'
 wb = load_or_create_workbook(file_path)
