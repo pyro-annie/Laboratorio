@@ -78,6 +78,25 @@ body {
   margin-top: 4px;
   letter-spacing: 4px
 }
+#togglePassword {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+/* Estilo para la animación de brillo al pasar el cursor */
+#togglePassword:hover {
+  color: #03e9f4; /* Mantiene el color del ícono cuando el cursor está encima */
+  animation: glowing 1s infinite;
+}
+
+/* Estilo para cambiar el color del botón cuando está activo */
+#togglePassword.active {
+  color: #03e9f4; /* Cambia el color del ícono a #03e9f4 */
+}
 
 .login:hover {
   background: #03e9f4;
